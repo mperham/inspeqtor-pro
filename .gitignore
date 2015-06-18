@@ -26,3 +26,5 @@ templates.go
 realtest
 .local.sh
 expose/static.go
+.gnupg
+packaging
