@@ -15,13 +15,13 @@ Extended functionality for Inspeqtor.
 
 ## Documentation
 
-See the Inspeqtor [wiki](https://github.com/mperham/inspeqtor/wiki/) for documentation and [issue tracker](https://github.com/mperham/inspeqtor/issues/) for bug reports.
+See the [wiki](https://github.com/mperham/inspeqtor/wiki/) for documentation and [issue tracker](https://github.com/mperham/inspeqtor-pro/issues/) for bug reports.
 
 
 ## License
 
-Commercial.  You may use Inspeqtor Pro in non-production environments
-for free.  You must purchase a commercial license for use in production.
+Commercial.  You may use Inspeqtor Pro in non-production environments for free.
+You must [purchase a commercial license](https://plasso.co/s/6EHPPwN1N9) for use in production.
 
 ## Author
 
