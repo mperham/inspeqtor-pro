@@ -36,9 +36,7 @@ prepare:
 
 license:
 	@go run cmd/lic.go $(to)
-	@scp inspeqtor-passwd dl.contribsys.com:/var/www/inspeqtor-passwd
-	@scp ~/src/inspeqtor-stuff/customers/list.go dl.contribsys.com:~/.inspeqtor-customer-list.go
-	@rm -f license.bin inspeqtor-passwd
+	@rm -f license.bin
 
 assets:
 	@pushd ../inspeqtor >/dev/null && \
@@ -64,6 +62,8 @@ cover:
 	go test -cover -coverprofile cover.out github.com/mperham/inspeqtor-pro/expose
 	go tool cover -html=cover.out
 
+# brew update
+# brew upgrade go --with-cc-common
 build: test
 	@GOOS=linux GOARCH=amd64 go build -o inspeqtor main.go self.go licensing.go
 
@@ -112,21 +112,12 @@ tag:
 	git tag v$(VERSION)-$(ITERATION)
 	git push --tags
 
-upload: package tag
-	# brew install rpm gpg2
-	rpm --addsign packaging/output/*/*.rpm
-	# signing makes the file 600!?
-	chmod 644 packaging/output/*/*.rpm
-	scp -r packaging/output dl.contribsys.com:~
-	ssh -t dl.contribsys.com ' \
-			freight add -v ~/output/upstart/$(NAME)_$(VERSION)-$(ITERATION)_amd64.deb apt/ubuntu/trusty && \
-			freight add -v ~/output/upstart/$(NAME)_$(VERSION)-$(ITERATION)_amd64.deb apt/ubuntu/precise && \
-			freight cache --passphrase-file=/home/mike/.passphrase'
-	ssh -t dl.contribsys.com ' \
-		cp ~/output/upstart/$(NAME)-$(VERSION)-$(ITERATION).x86_64.rpm /var/www/contribsys.com/inspeqtor-pro/yum/el/6/x86_64 && \
-		cp ~/output/systemd/$(NAME)-$(VERSION)-$(ITERATION).x86_64.rpm /var/www/contribsys.com/inspeqtor-pro/yum/el/7/x86_64 && \
-		createrepo /var/www/contribsys.com/inspeqtor-pro/yum/el/6/x86_64 && \
-		createrepo /var/www/contribsys.com/inspeqtor-pro/yum/el/7/x86_64'
+# gem install fpm package_cloud
+upload:
+	package_cloud push contribsys/inspeqtor-pro/ubuntu/precise packaging/output/upstart/$(NAME)_$(VERSION)-$(ITERATION)_amd64.deb
+	package_cloud push contribsys/inspeqtor-pro/ubuntu/trusty packaging/output/upstart/$(NAME)_$(VERSION)-$(ITERATION)_amd64.deb
+	package_cloud push contribsys/inspeqtor-pro/el/7 packaging/output/systemd/$(NAME)-$(VERSION)-$(ITERATION).x86_64.rpm
+	package_cloud push contribsys/inspeqtor-pro/el/6 packaging/output/upstart/$(NAME)-$(VERSION)-$(ITERATION).x86_64.rpm
 
 build_rpm: build_rpm_upstart build_rpm_systemd
 build_deb: build_deb_upstart
@@ -141,9 +132,9 @@ build_rpm_upstart: build
 	 	--before-remove ../inspeqtor/packaging/scripts/prerm.rpm.upstart \
 		--after-remove ../inspeqtor/packaging/scripts/postrm.rpm.upstart \
 		--url http://contribsys.com/inspeqtor \
-		--description "Application infrastructure monitoring" \
+		--description "Modern service monitoring" \
 		-m "Contributed Systems LLC <oss@contribsys.com>" \
-		--iteration $(ITERATION) --license "GPL 3.0" \
+		--iteration $(ITERATION) --license "Commercial" \
 		--vendor "Contributed Systems" -a amd64 \
 		inspeqtor=/usr/bin/inspeqtor \
 		../inspeqtor/packaging/root/=/
@@ -158,9 +149,9 @@ build_rpm_systemd: build
 	 	--before-remove ../inspeqtor/packaging/scripts/prerm.rpm.systemd \
 		--after-remove ../inspeqtor/packaging/scripts/postrm.rpm.systemd \
 		--url http://contribsys.com/inspeqtor \
-		--description "Application infrastructure monitoring" \
+		--description "Modern service monitoring" \
 		-m "Contributed Systems LLC <oss@contribsys.com>" \
-		--iteration $(ITERATION) --license "GPL 3.0" \
+		--iteration $(ITERATION) --license "Commercial" \
 		--vendor "Contributed Systems" -a amd64 \
 		inspeqtor=/usr/bin/inspeqtor \
 		../inspeqtor/packaging/root/=/
@@ -176,9 +167,9 @@ build_deb_upstart: build
 	 	--before-remove ../inspeqtor/packaging/scripts/prerm.deb.upstart \
 		--after-remove ../inspeqtor/packaging/scripts/postrm.deb.upstart \
 		--url http://contribsys.com/inspeqtor \
-		--description "Application infrastructure monitoring" \
+		--description "Modern service monitoring" \
 		-m "Contributed Systems LLC <oss@contribsys.com>" \
-		--iteration $(ITERATION) --license "GPL 3.0" \
+		--iteration $(ITERATION) --license "Commercial" \
 		--vendor "Contributed Systems" -a amd64 \
 		inspeqtor=/usr/bin/inspeqtor \
 		../inspeqtor/packaging/root/=/
