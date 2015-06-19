@@ -23,6 +23,8 @@ See the [wiki](https://github.com/mperham/inspeqtor/wiki/) for documentation and
 Commercial.  You may use Inspeqtor Pro in non-production environments for free.
 You must [purchase a commercial license](https://plasso.co/s/6EHPPwN1N9) for use in production.
 
+If you want something completely free for all usage, check out [Inspeqtor](https://github.com/mperham/inspeqtor).
+
 ## Author
 
 Mike Perham, Contributed Systems
