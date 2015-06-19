@@ -1,6 +1,6 @@
 # Inspeqtor Pro
 
-Extended functionality for Inspeqtor.
+Extended functionality for [Inspeqtor](https://github.com/mperham/inspeqtor), the modern service monitor.
 
 * Send notifications to group chat services: Slack, Campfire, HipChat, et al.
 * Target alerts to different teams
