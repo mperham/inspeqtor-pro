@@ -13,9 +13,7 @@ import (
 	"math/rand"
 	"net/smtp"
 	"os"
-	"os/exec"
 	"os/user"
-	"strings"
 	"text/template"
 	"time"
 
@@ -62,8 +60,6 @@ func main() {
 		panic("No such customer: " + email)
 	}
 
-	createMasterPasswd()
-
 	if licinfo != nil {
 		repoToken := createMasterToken(licinfo.Email)
 		user, pwd := repoToken[0:8], repoToken[9:17]
@@ -91,32 +87,6 @@ func createMasterToken(email string) string {
 	hash := sha256.New()
 	hash.Write([]byte(fmt.Sprintf("%s-%s", secret.Salt, email)))
 	return hex.EncodeToString(hash.Sum(nil))
-}
-
-func createMasterPasswd() {
-	file, err := os.Create("inspeqtor-passwd")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-
-	for _, customer := range secret.List {
-		fmt.Println(customer.Email)
-		repoToken := createMasterToken(customer.Email)
-		user, pwd := repoToken[0:8], repoToken[9:17]
-		line := toHttpd(user, pwd)
-		file.Write([]byte(line))
-		file.Write([]byte("\n"))
-	}
-}
-
-func toHttpd(user, pwd string) string {
-	cmd := exec.Command("htpasswd", "-nb", user, pwd)
-	data, err := cmd.CombinedOutput()
-	if err != nil {
-		panic(err)
-	}
-	return strings.TrimSpace(string(data))
 }
 
 func sendEmail(email string, lic EmailData, licdata []byte) {
@@ -172,8 +142,8 @@ func makeContent(to string, body []byte, licdata []byte) []byte {
 }
 
 func encrypt(doc License) []byte {
-	myprv := readKey("src/inspeqtor-stuff/keys/local.prv")
-	pub := readKey("src/inspeqtor-stuff/keys/remote.pub")
+	myprv := readKey("src/inspeqtor-stuff/keys/local.prv") // alice
+	pub := readKey("src/inspeqtor-stuff/keys/remote.pub")  // bob
 
 	fmt.Println("Encrypting this document")
 	fmt.Println(doc)

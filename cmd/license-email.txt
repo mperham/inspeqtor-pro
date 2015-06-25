@@ -7,14 +7,6 @@ License file: attached.
 To install Inspeqtor Pro, please go to https://github.com/mperham/inspeqtor/wiki/Pro-Installation
 and follow the instructions specific to your system.
 
-You will need to set this variable:
-
-export PROSOURCE=https://{{.License.User}}:{{.License.Pwd}}@dl.contribsys.com
-
-You can verify your subscription any time by clicking here:
-
-https://{{.License.User}}:{{.License.Pwd}}@dl.contribsys.com/inspeqtor-pro/
-
 You'll want to read through the Inspeqtor wiki at https://github.com/mperham/inspeqtor/wiki
 to learn all about the various Pro features and how to use them.
 
