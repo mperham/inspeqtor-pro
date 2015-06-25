@@ -21,18 +21,12 @@ fmt:
 	find . -name "*.go" -exec goimports -w {} \;
 
 lint:
-	@go vet ./...
-	@golint ./... | grep -v unexported
-	@errcheck github.com/mperham/inspeqtor-pro \
-		github.com/mperham/inspeqtor-pro/channels \
-		github.com/mperham/inspeqtor-pro/expose \
-		github.com/mperham/inspeqtor-pro/jobs \
-		github.com/mperham/inspeqtor-pro/ownership \
-		github.com/mperham/inspeqtor-pro/statsd
+	gometalinter ./...
 
 prepare:
-	@go get golang.org/x/crypto/nacl/box
-	@go get github.com/kisielk/errcheck
+	go get golang.org/x/crypto/nacl/box
+	go get github.com/alecthomas/gometalinter
+	gometalinter --install
 
 license:
 	@go run cmd/lic.go $(to)
