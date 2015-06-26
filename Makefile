@@ -34,11 +34,11 @@ license:
 	@rm -f license.bin
 
 assets:
-	@pushd ../inspeqtor >/dev/null && \
+	@bash -c "pushd ../inspeqtor >/dev/null && \
 		cp ../inspeqtor-pro/templates/email/Job* templates/email && \
   	go-bindata -pkg inspeqtor -o templates.go templates/... && \
 	 	rm templates/email/Job* && \
-		popd >/dev/null
+		popd >/dev/null"
 	@go generate github.com/mperham/inspeqtor-pro/channels
 	@go generate github.com/mperham/inspeqtor-pro/expose
 
