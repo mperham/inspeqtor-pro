@@ -107,8 +107,8 @@ tag:
 	git tag v$(VERSION)-$(ITERATION)
 	git push --tags
 
-# gem install fpm package_cloud
-upload:
+# gem install -N fpm package_cloud
+upload: package
 	package_cloud push contribsys/inspeqtor-pro/ubuntu/precise packaging/output/upstart/$(NAME)_$(VERSION)-$(ITERATION)_amd64.deb
 	package_cloud push contribsys/inspeqtor-pro/ubuntu/trusty packaging/output/upstart/$(NAME)_$(VERSION)-$(ITERATION)_amd64.deb
 	package_cloud push contribsys/inspeqtor-pro/el/7 packaging/output/systemd/$(NAME)-$(VERSION)-$(ITERATION).x86_64.rpm
