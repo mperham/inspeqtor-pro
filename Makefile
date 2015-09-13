@@ -24,6 +24,7 @@ lint:
 	gometalinter ./...
 
 prepare:
+	go get github.com/stretchr/testify
 	go get golang.org/x/crypto/nacl/box
 	go get github.com/alecthomas/gometalinter
 	gometalinter --install
