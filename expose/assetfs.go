@@ -54,14 +54,14 @@ func (f *DummyFile) Sys() interface{} {
 type AssetFile struct {
 	*bytes.Reader
 	io.Closer
-	DummyFile
+	*DummyFile
 }
 
 func NewAssetFile(name string, content []byte) *AssetFile {
 	return &AssetFile{
 		bytes.NewReader(content),
 		ioutil.NopCloser(nil),
-		DummyFile{name, false, int64(len(content))}}
+		&DummyFile{name, false, int64(len(content))}}
 }
 
 func (f *AssetFile) Readdir(count int) ([]os.FileInfo, error) {
@@ -70,6 +70,10 @@ func (f *AssetFile) Readdir(count int) ([]os.FileInfo, error) {
 
 func (f *AssetFile) Stat() (os.FileInfo, error) {
 	return f, nil
+}
+
+func (f *AssetFile) Size() int64 {
+	return f.DummyFile.Size()
 }
 
 type AssetDirectory struct {
@@ -88,7 +92,7 @@ func NewAssetDirectory(name string, children []string, fs *AssetFS) *AssetDirect
 		AssetFile{
 			bytes.NewReader(nil),
 			ioutil.NopCloser(nil),
-			DummyFile{name, true, 0},
+			&DummyFile{name, true, 0},
 		},
 		0,
 		fileinfos}

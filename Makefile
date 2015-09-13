@@ -1,5 +1,5 @@
 NAME=inspeqtor-pro
-VERSION=0.8.1
+VERSION=1.0.0
 # when fixing packaging bugs but not changing the binary, we increment this number
 ITERATION=1
 
