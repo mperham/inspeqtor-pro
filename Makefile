@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 NAME=inspeqtor-pro
 VERSION=1.0.1
 # when fixing packaging bugs but not changing the binary, we increment this number
