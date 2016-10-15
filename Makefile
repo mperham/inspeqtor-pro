@@ -25,11 +25,11 @@ lint:
 	gometalinter ./...
 
 prepare:
-	go get github.com/stretchr/testify
+	go get github.com/stretchr/testify/...
 	go get golang.org/x/crypto/nacl/box
 	go get github.com/alecthomas/gometalinter
-	go get -d github.com/mperham/inspeqtor
-	go get github.com/jteeuwen/go-bindata
+	go get -d github.com/mperham/inspeqtor/...
+	go get github.com/jteeuwen/go-bindata/...
 	gometalinter --install
 
 license:
