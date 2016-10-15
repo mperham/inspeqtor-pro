@@ -28,6 +28,7 @@ prepare:
 	go get github.com/stretchr/testify
 	go get golang.org/x/crypto/nacl/box
 	go get github.com/alecthomas/gometalinter
+	go get github.com/mperham/inspeqtor
 	gometalinter --install
 
 license:
