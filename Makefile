@@ -1,5 +1,5 @@
 NAME=inspeqtor-pro
-VERSION=1.0.0
+VERSION=1.0.1
 # when fixing packaging bugs but not changing the binary, we increment this number
 ITERATION=1
 
@@ -109,13 +109,14 @@ tag:
 
 # gem install -N fpm package_cloud
 upload: package
+	package_cloud push contribsys/inspeqtor-pro/ubuntu/xenial packaging/output/systemd/$(NAME)_$(VERSION)-$(ITERATION)_amd64.deb
 	package_cloud push contribsys/inspeqtor-pro/ubuntu/precise packaging/output/upstart/$(NAME)_$(VERSION)-$(ITERATION)_amd64.deb
 	package_cloud push contribsys/inspeqtor-pro/ubuntu/trusty packaging/output/upstart/$(NAME)_$(VERSION)-$(ITERATION)_amd64.deb
 	package_cloud push contribsys/inspeqtor-pro/el/7 packaging/output/systemd/$(NAME)-$(VERSION)-$(ITERATION).x86_64.rpm
 	package_cloud push contribsys/inspeqtor-pro/el/6 packaging/output/upstart/$(NAME)-$(VERSION)-$(ITERATION).x86_64.rpm
 
 build_rpm: build_rpm_upstart build_rpm_systemd
-build_deb: build_deb_upstart
+build_deb: build_deb_upstart build_deb_systemd
 
 build_rpm_upstart: build
 	# gem install fpm
@@ -151,7 +152,6 @@ build_rpm_systemd: build
 		inspeqtor=/usr/bin/inspeqtor \
 		../inspeqtor/packaging/root/=/
 
-# TODO build_deb_systemd
 build_deb_upstart: build
 	# gem install fpm
 	fpm -s dir -t deb -n $(NAME) -v $(VERSION) -p packaging/output/upstart \
@@ -168,5 +168,23 @@ build_deb_upstart: build
 		--vendor "Contributed Systems" -a amd64 \
 		inspeqtor=/usr/bin/inspeqtor \
 		../inspeqtor/packaging/root/=/
+
+build_deb_systemd: build
+	# gem install fpm
+	fpm -s dir -t deb -n $(NAME) -v $(VERSION) -p packaging/output/systemd \
+		--deb-priority optional --category admin \
+		--deb-compression bzip2 \
+		--replaces inspeqtor \
+	 	--after-install ../inspeqtor/packaging/scripts/postinst.deb.systemd \
+	 	--before-remove ../inspeqtor/packaging/scripts/prerm.deb.systemd \
+		--after-remove ../inspeqtor/packaging/scripts/postrm.deb.systemd \
+		--url http://contribsys.com/inspeqtor \
+		--description "Modern service monitoring" \
+		-m "Contributed Systems LLC <oss@contribsys.com>" \
+		--iteration $(ITERATION) --license "Commercial" \
+		--vendor "Contributed Systems" -a amd64 \
+		inspeqtor=/usr/bin/inspeqtor \
+		../inspeqtor/packaging/root/=/
+
 
 .PHONY: all clean test build package upload
