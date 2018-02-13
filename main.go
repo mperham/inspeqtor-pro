@@ -23,12 +23,6 @@ func main() {
 	cli.SetupLogging()
 	options := cli.ParseArguments()
 
-	_, err := verifyLicense(options.ConfigDirectory)
-	if err != nil {
-		util.Warn("Error verifying license file: %s", err)
-		os.Exit(127)
-	}
-
 	ins, err := inspeqtor.New(options.ConfigDirectory, options.SocketPath)
 	if err != nil {
 		log.Fatalln(err)

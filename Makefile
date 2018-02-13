@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 NAME=inspeqtor-pro
-VERSION=1.0.1
+VERSION=1.1.0
 # when fixing packaging bugs but not changing the binary, we increment this number
 ITERATION=1
 
@@ -32,10 +32,6 @@ prepare:
 	go get github.com/jteeuwen/go-bindata/...
 	gometalinter --install
 
-license:
-	@go run cmd/lic.go $(to)
-	@rm -f license.bin
-
 assets:
 	@pushd ../inspeqtor >/dev/null && \
 		cp ../inspeqtor-pro/templates/email/Job* templates/email && \
@@ -63,7 +59,7 @@ cover:
 # brew update
 # brew upgrade go --with-cc-common
 build: test
-	@GOOS=linux GOARCH=amd64 go build -o inspeqtor main.go self.go licensing.go
+	@GOOS=linux GOARCH=amd64 go build -o inspeqtor main.go self.go
 
 clean:
 	rm -f main inspeqtor
@@ -76,7 +72,7 @@ git_update:
 	cd ../inspeqtor-pro && git pull
 
 real: assets
-	GOMAXPROCS=4 go run -race main.go self.go licensing.go -l debug -s i.sock -c realtest
+	GOMAXPROCS=4 go run -race main.go self.go -l debug -s i.sock -c realtest
 
 package: clean test build build_deb build_rpm
 # 	build_rpm
@@ -133,7 +129,7 @@ build_rpm_upstart: build
 		--url http://contribsys.com/inspeqtor \
 		--description "Modern service monitoring" \
 		-m "Contributed Systems LLC <oss@contribsys.com>" \
-		--iteration $(ITERATION) --license "Commercial" \
+		--iteration $(ITERATION) --license "GPLv3" \
 		--vendor "Contributed Systems" -a amd64 \
 		inspeqtor=/usr/bin/inspeqtor \
 		../inspeqtor/packaging/root/=/
@@ -150,7 +146,7 @@ build_rpm_systemd: build
 		--url http://contribsys.com/inspeqtor \
 		--description "Modern service monitoring" \
 		-m "Contributed Systems LLC <oss@contribsys.com>" \
-		--iteration $(ITERATION) --license "Commercial" \
+		--iteration $(ITERATION) --license "GPLv3" \
 		--vendor "Contributed Systems" -a amd64 \
 		inspeqtor=/usr/bin/inspeqtor \
 		../inspeqtor/packaging/root/=/
@@ -167,7 +163,7 @@ build_deb_upstart: build
 		--url http://contribsys.com/inspeqtor \
 		--description "Modern service monitoring" \
 		-m "Contributed Systems LLC <oss@contribsys.com>" \
-		--iteration $(ITERATION) --license "Commercial" \
+		--iteration $(ITERATION) --license "GPLv3" \
 		--vendor "Contributed Systems" -a amd64 \
 		inspeqtor=/usr/bin/inspeqtor \
 		../inspeqtor/packaging/root/=/
@@ -184,7 +180,7 @@ build_deb_systemd: build
 		--url http://contribsys.com/inspeqtor \
 		--description "Modern service monitoring" \
 		-m "Contributed Systems LLC <oss@contribsys.com>" \
-		--iteration $(ITERATION) --license "Commercial" \
+		--iteration $(ITERATION) --license "GPLv3" \
 		--vendor "Contributed Systems" -a amd64 \
 		inspeqtor=/usr/bin/inspeqtor \
 		../inspeqtor/packaging/root/=/
